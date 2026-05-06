@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://cslvj5cind07i"]
+[gd_scene load_steps=25 format=4 uid="uid://cslvj5cind07i"]
 
 [ext_resource type="Texture2D" uid="uid://d8ip37hn34im" path="res://sprites/ninjaCat.png" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cm8c4kwwncyba" path="res://scenes/scripts/player.gd" id="1_tefeu"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://151gylnblr3u" path="res://sprites/environment tilesets/Wall_1_32x32.png" id="3_sugp2"]
 [ext_resource type="Texture2D" uid="uid://bj4vvn80427sh" path="res://sprites/item_tileset.png" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://c3u8spixr5jcp" path="res://sprites/environment tilesets/Borders_32x32.png" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://di6c5n81e25hv" path="res://scenes/teddy.tscn" id="6_o6xl0"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0wfyh"]
 radius = 17.0
@@ -46,6 +47,9 @@ animations = [{
 "name": &"idle",
 "speed": 5.0
 }]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tefeu"]
+radius = 33.06055
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sugp2"]
 texture = ExtResource("2_0wfyh")
@@ -3201,19 +3205,30 @@ physics_layer_0/collision_layer = 2
 physics_layer_0/collision_mask = 5
 sources/0 = SubResource("TileSetAtlasSource_tefeu")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_tbgi4"]
-radius = 18.027756
+[sub_resource type="CircleShape2D" id="CircleShape2D_tipki"]
+radius = 14.035668
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_o6xl0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_85g3d"]
 atlas = ExtResource("4_jyhfs")
-region = Rect2(58.767574, 27.435738, 17.232426, 17.564262)
+region = Rect2(21, 2, 9, 11)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o6xl0"]
+radius = 25.495098
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tipki"]
+atlas = ExtResource("4_jyhfs")
+region = Rect2(32, 28, 17, 22)
 
 [node name="Main" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("_kickRight", "_kickLeft")]
 z_index = 100
 collision_mask = 6
 script = ExtResource("1_tefeu")
+_kickRight = NodePath("KickRight")
+_kickLeft = NodePath("KickLeft")
+_rightKickDir = Vector2(300, 500)
+_leftKickDir = Vector2(-300, 500)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_0wfyh")
@@ -3226,6 +3241,23 @@ animation = &"idle"
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 
+[node name="KickLeft" type="Area2D" parent="Player"]
+position = Vector2(-28, 0)
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/KickLeft"]
+position = Vector2(14, -1)
+shape = SubResource("CircleShape2D_tefeu")
+
+[node name="KickRight" type="Area2D" parent="Player"]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/KickRight"]
+position = Vector2(14, -1)
+shape = SubResource("CircleShape2D_tefeu")
+
 [node name="TileMapLayer_Floor" type="TileMapLayer" parent="."]
 z_index = 1
 position = Vector2(1, 0)
@@ -3237,22 +3269,117 @@ collision_visibility_mode = 1
 tile_map_data = PackedByteArray("AAD4//z/AQARAAcAAAD4//3/AQARAAcAAAD4//7/AQARAAcAAAD4////AQARAAcAAAD4/wAAAQARAAcAAAD5//z/AQARAAcAAAD5//3/AQARAAcAAAD5//7/AQARAAcAAAD5////AQARAAcAAAD5/wAAAQARAAcAAAD6//z/AQARAAcAAAD6//3/AQARAAcAAAD6//7/AQARAAcAAAD6////AQARAAcAAAD6/wAAAQARAAcAAAD7//z/AQARAAcAAAD7//3/AQARAAcAAAD7//7/AQARAAcAAAD7////AQARAAcAAAD7/wAAAQARAAcAAAD8//z/AQARAAcAAAD8//3/AQARAAcAAAD8//7/AQARAAcAAAD8////AQARAAcAAAD8/wAAAQARAAcAAAD9//z/AQARAAcAAAD9//3/AQARAAcAAAD9//7/AQARAAcAAAD9////AQARAAcAAAD9/wAAAQARAAcAAAD+//z/AQARAAcAAAD+//3/AQARAAcAAAD+//7/AQARAAcAAAD+////AQARAAcAAAD+/wAAAQARAAcAAAD///z/AQARAAcAAAD///3/AQARAAcAAAD///7/AQARAAcAAAD/////AQARAAcAAAD//wAAAQARAAcAAAAAAPz/AQARAAcAAAAAAP3/AQARAAcAAAAAAP7/AQARAAcAAAAAAP//AQARAAcAAAAAAAAAAQARAAcAAAABAPz/AQARAAcAAAABAP3/AQARAAcAAAABAP7/AQARAAcAAAABAP//AQARAAcAAAABAAAAAQARAAcAAAACAPz/AQARAAcAAAACAP3/AQARAAcAAAACAP7/AQARAAcAAAACAP//AQARAAcAAAACAAAAAQARAAcAAAADAPz/AQARAAcAAAADAP3/AQARAAcAAAADAP7/AQARAAcAAAADAP//AQARAAcAAAADAAAAAQARAAcAAAAEAPz/AQARAAcAAAAEAP3/AQARAAcAAAAEAP7/AQARAAcAAAAEAP//AQARAAcAAAAEAAAAAQARAAcAAAAFAPz/AQARAAcAAAAFAP3/AQARAAcAAAAFAP7/AQARAAcAAAAFAP//AQARAAcAAAAFAAAAAQARAAcAAAAGAPz/AQARAAcAAAAGAP3/AQARAAcAAAAGAP7/AQARAAcAAAAGAP//AQARAAcAAAAGAAAAAQARAAcAAAAHAPz/AQARAAcAAAAHAP3/AQARAAcAAAAHAP7/AQARAAcAAAAHAP//AQARAAcAAAAHAAAAAQARAAcAAAAIAPz/AQARAAcAAAAIAP3/AQARAAcAAAAIAP7/AQARAAcAAAAIAP//AQARAAcAAAAIAAAAAQARAAcAAAAJAPz/AQARAAcAAAAJAP3/AQARAAcAAAAJAP7/AQARAAcAAAAJAP//AQARAAcAAAAJAAAAAQARAAcAAAA=")
 tile_set = SubResource("TileSet_tbgi4")
 
-[node name="TileMapLayer_Platforms" type="TileMapLayer" parent="."]
+[node name="TileMapLayer_Platforms12" type="TileMapLayer" parent="."]
 z_index = 2
-position = Vector2(-26, 34)
+position = Vector2(-620, -24)
 tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
 tile_set = SubResource("TileSet_o6xl0")
 collision_visibility_mode = 1
 
-[node name="Teddy" type="RigidBody2D" parent="."]
-z_index = 10
-position = Vector2(70, 15)
+[node name="TileMapLayer_Platforms11" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(320, -97)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms10" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(143, -149)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms9" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-414, -197)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms8" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-26, -203)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms7" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-223, -143)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms6" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(148, -26)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms5" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-427, -80)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms4" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-36, -84)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms3" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-425, 29)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms2" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-225, -23)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="TileMapLayer_Platforms" type="TileMapLayer" parent="."]
+z_index = 2
+position = Vector2(-34, 34)
+tile_map_data = PackedByteArray("AAAFAP7/AAAGAAEAAAAGAP7/AAAGAAEAAAAHAP7/AAAGAAEAAAAIAP7/AAACAAEAAAA=")
+tile_set = SubResource("TileSet_o6xl0")
+collision_visibility_mode = 1
+
+[node name="Teddy" parent="." instance=ExtResource("6_o6xl0")]
+position = Vector2(184, -67)
+
+[node name="Medkit" type="RigidBody2D" parent="."]
+position = Vector2(-1, -109)
 collision_layer = 4
 collision_mask = 15
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Teddy"]
-shape = SubResource("CircleShape2D_tbgi4")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Medkit"]
+shape = SubResource("CircleShape2D_tipki")
 
-[node name="Sprite2D" type="Sprite2D" parent="Teddy"]
+[node name="Sprite2D" type="Sprite2D" parent="Medkit"]
 scale = Vector2(2, 2)
-texture = SubResource("AtlasTexture_o6xl0")
+texture = SubResource("AtlasTexture_85g3d")
+
+[node name="Gas can" type="RigidBody2D" parent="."]
+z_index = 10
+position = Vector2(-213, -61)
+collision_layer = 4
+collision_mask = 15
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gas can"]
+shape = SubResource("CircleShape2D_o6xl0")
+
+[node name="Sprite2D" type="Sprite2D" parent="Gas can"]
+scale = Vector2(2, 2)
+texture = SubResource("AtlasTexture_tipki")
+
+[connection signal="body_shape_entered" from="Player/KickLeft" to="Player" method="_on_kick_left_body_shape_entered"]
+[connection signal="body_shape_entered" from="Player/KickRight" to="Player" method="_on_kick_right_body_shape_entered"]
