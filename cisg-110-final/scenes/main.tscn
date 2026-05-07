@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://cslvj5cind07i"]
+[gd_scene load_steps=26 format=4 uid="uid://cslvj5cind07i"]
 
 [ext_resource type="Texture2D" uid="uid://d8ip37hn34im" path="res://sprites/ninjaCat.png" id="1_o5qli"]
 [ext_resource type="Script" uid="uid://cm8c4kwwncyba" path="res://scenes/scripts/player.gd" id="1_tefeu"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bj4vvn80427sh" path="res://sprites/item_tileset.png" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://c3u8spixr5jcp" path="res://sprites/environment tilesets/Borders_32x32.png" id="4_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://di6c5n81e25hv" path="res://scenes/teddy.tscn" id="6_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://bxfk8skgf0y87" path="res://scenes/rat.tscn" id="8_tipki"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0wfyh"]
 radius = 17.0
@@ -3380,6 +3381,9 @@ shape = SubResource("CircleShape2D_o6xl0")
 [node name="Sprite2D" type="Sprite2D" parent="Gas can"]
 scale = Vector2(2, 2)
 texture = SubResource("AtlasTexture_tipki")
+
+[node name="Rat" parent="." instance=ExtResource("8_tipki")]
+position = Vector2(114, 3)
 
 [connection signal="body_shape_entered" from="Player/KickLeft" to="Player" method="_on_kick_left_body_shape_entered"]
 [connection signal="body_shape_entered" from="Player/KickRight" to="Player" method="_on_kick_right_body_shape_entered"]
